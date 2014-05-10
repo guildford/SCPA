@@ -23,7 +23,7 @@ public class AppConf {
 	// initiate DATA_TABLE
 	static {
 		if (AppConf.isDebug) {
-			DATA_TABLE.put("SMARTCARD", "/usr/zming/data/card/sample.csv");
+			DATA_TABLE.put("SMARTCARD", "/usr/zm/sample.csv");
 			DATA_TABLE.put("STATION_INFO", "baseData/stationinfo.csv");
 		} else {
 			DATA_TABLE.put("SMARTCARD", AppConf.HDFS_ROOT + "card/BUScard/");

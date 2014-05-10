@@ -33,7 +33,7 @@ public class ODExtraction implements Runnable {
 		JavaRDD<String> SMARTCARD_FULLOD = this.SMARTCARD.map(new ODAtRandom());
 		
 		if (DataPool.getInstance().put("SMARTCARD_FULLOD", SMARTCARD_FULLOD)) {
-			System.out.println("OD information Extraction Finished.");
+//			System.out.println("OD information Extraction Finished.");
 		}
 //		System.out.println(this.SMARTCARD.count());
 	}

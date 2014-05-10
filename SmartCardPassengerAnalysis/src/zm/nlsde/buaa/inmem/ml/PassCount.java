@@ -2,6 +2,7 @@ package zm.nlsde.buaa.inmem.ml;
 
 import java.util.Map;
 
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 
@@ -18,14 +19,20 @@ public class PassCount implements Runnable {
 
 	@Override
 	public void run() {
-		Map<String, Object> upcount = this.SMARTCARD_FULLOD.keyBy(new KeyByLocationTimeUP()).countByKey();
+		JavaPairRDD<String, String> pointCountUp = this.SMARTCARD_FULLOD.keyBy(new KeyByLocationTimeUP());
+		JavaPairRDD<String, String> pointCountDown = this.SMARTCARD_FULLOD.keyBy(new KeyByLocationTimeDown());
+		
+		Map<String, Object> upcount = pointCountUp.countByKey();
 //		for (String key: upcount.keySet()) {
 //			System.out.println(key + ": " + upcount.get(key));
 //		}
 		System.out.println("Passenger Count Finished with " + upcount.size() + " Boarding Keys.");
 		
-		Map<String, Object> downcount = this.SMARTCARD_FULLOD.keyBy(new KeyByLocationTimeDown()).countByKey();
+		Map<String, Object> downcount = pointCountDown.countByKey();
 		System.out.println("Passenger Count Finished with " + downcount.size() + " Alighting Keys.");
+		
+		// TODO
+//		DataPool.getInstance().put("POINT_COUNT", pointCountUp.union(pointCountDown));
 	}
 	
 	@SuppressWarnings("serial")

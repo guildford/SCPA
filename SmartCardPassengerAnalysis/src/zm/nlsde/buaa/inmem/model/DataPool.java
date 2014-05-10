@@ -3,6 +3,7 @@ package zm.nlsde.buaa.inmem.model;
 import java.util.HashMap;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 
@@ -18,7 +19,7 @@ public class DataPool {
 		// initial jsc
 		SparkConf spconf = new SparkConf();
 		if (AppConf.isDebug) {
-			spconf.setMaster("local[8]");
+			spconf.setMaster("local[2]");
 		} else {
 			spconf.setMaster("yarn-standalone");
 		}
@@ -33,6 +34,8 @@ public class DataPool {
 	}
 	
 	private HashMap<String, JavaRDD<String>> data = new HashMap<String, JavaRDD<String>>();
+	// TODO
+	private HashMap<String, JavaPairRDD<String, String>> pairdata = new HashMap<String, JavaPairRDD<String, String>>();
 	
 	private static class DataPoolHolder {
 		private static final DataPool INSTANCE = new DataPool();
@@ -59,6 +62,13 @@ public class DataPool {
 	}
 
 	public Boolean put(String name, JavaRDD<String> data) {
+		// if memory enough
+		if (!this.isMemoryAdequate()) {
+			System.err.println("There is no adequate memory to cache.");
+			return false;
+		}
+		
+		// if data already exists
 		if (this.data.containsKey(name)) {
 			System.err.println("Cannot override data.");
 			return false;
@@ -97,6 +107,11 @@ public class DataPool {
 		}
 		System.err.println(threadname + "is applying illegal data.");
 		return false;
+	}
+	
+	// TODO
+	public boolean isMemoryAdequate() {
+		return true;
 	}
 	
 	public Object broadcast(Object o) {
