@@ -1,10 +1,12 @@
 package zm.nlsde.buaa.inmem.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaRDDLike;
 import org.apache.spark.api.java.JavaSparkContext;
 
 import zm.nlsde.buaa.inmem.boot.AppConf;
@@ -34,7 +36,6 @@ public class DataPool {
 	}
 	
 	private HashMap<String, JavaRDD<String>> data = new HashMap<String, JavaRDD<String>>();
-	// TODO
 	private HashMap<String, JavaPairRDD<String, String>> pairdata = new HashMap<String, JavaPairRDD<String, String>>();
 	
 	private static class DataPoolHolder {
@@ -56,21 +57,21 @@ public class DataPool {
 		}
 		
 		// cache data into distributed memory
-		for (JavaRDD<String> rdd: this.data.values()) {
+		for (JavaRDD<String> rdd: data.values()) {
 			rdd.cache().count();
 		}
 	}
 
 	public Boolean put(String name, JavaRDD<String> data) {
-		// if memory enough
+		// memory capacity
 		if (!this.isMemoryAdequate()) {
-			System.err.println("There is no adequate memory to cache.");
+			System.err.println("No adequate memory to cache.");
 			return false;
 		}
 		
-		// if data already exists
+		// RDDs are read-only
 		if (this.data.containsKey(name)) {
-			System.err.println("Cannot override data.");
+			System.err.println(name + " already exists.");
 			return false;
 		} else {
 			this.data.put(name, data);
@@ -78,25 +79,55 @@ public class DataPool {
 		}
 	}
 	
-	public HashMap<String, JavaRDD<String>> getAll() {
+	public Boolean put(String name, JavaPairRDD<String, String> pair) {
+		// memory capacity
+		if (!this.isMemoryAdequate()) {
+			System.err.println("No adequate memory to cache.");
+			return false;
+		}
+		
+		// RDDs are read-only
+		if (this.pairdata.containsKey(name)) {
+			System.err.println(name + " already exists.");
+			return false;
+		} else {
+			this.pairdata.put(name, pair);
+			return true;
+		}
+	}
+	
+	public HashMap<String, JavaRDD<String>> getAllRDD() {
 		return this.data;
 	}
+	
+	public HashMap<String, JavaPairRDD<String, String>> getAllPairRDD() {
+		return this.pairdata;
+	}
 
-	public JavaRDD<String> get(String threadname, String datatype) {
+	public JavaRDDLike<? extends Serializable, ?> get(String threadname, String datatype, Boolean isPairRDD) {
 		if (this.verifyReadPermission(threadname, datatype)) {
-			return this.data.get(datatype);
+			return (isPairRDD ? this.pairdata : this.data).get(datatype);
 		}
 		return null;
 	}
 	
-	public HashMap<String, JavaRDD<String>> get(String threadname, String[] datatypelist) {
-		HashMap<String, JavaRDD<String>> data = new HashMap<String, JavaRDD<String>>();
+	public JavaRDDLike<? extends Serializable, ?> get(String threadname, String datatype) {
+		return this.get(threadname, datatype, false);
+	}
+	
+	public HashMap<String, JavaRDDLike<? extends Serializable, ?>> get(String threadname, String[] datatypelist, Boolean isPairRDD) {
+		HashMap<String, JavaRDDLike<? extends Serializable, ?>> result = new HashMap<String, JavaRDDLike<? extends Serializable, ?>>();
+		
 		for (String datatype : datatypelist) {
-			if (this.verifyReadPermission(threadname, datatype) && this.data.containsKey(datatype)) {
-				data.put(datatype, this.data.get(datatype));
+			if (this.verifyReadPermission(threadname, datatype) && (isPairRDD ? this.pairdata : this.data).containsKey(datatype)) {
+				result.put(datatype, (isPairRDD ? this.pairdata : this.data).get(datatype));
 			}
 		}
-		return data.size() == 0 ? null : data;
+		return result.size() == 0 ? null : result;
+	}
+	
+	public HashMap<String, JavaRDDLike<? extends Serializable, ?>> get(String threadname, String[] datatypelist) {
+		return this.get(threadname, datatypelist, false);
 	}
 	
 	public Boolean verifyReadPermission(String threadname, String datatype) {

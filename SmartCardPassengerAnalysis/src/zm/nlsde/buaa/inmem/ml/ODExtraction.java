@@ -17,8 +17,8 @@ public class ODExtraction implements Runnable {
 
 	@SuppressWarnings("unchecked")
 	public ODExtraction() {
-		this.SMARTCARD = DataPool.getInstance().get(this.getClass().getName(), "SMARTCARD");
-		this.STATION_INFO = DataPool.getInstance().get(this.getClass().getName(), "STATION_INFO");
+		this.SMARTCARD = (JavaRDD<String>) DataPool.getInstance().get(this.getClass().getName(), "SMARTCARD");
+		this.STATION_INFO = (JavaRDD<String>) DataPool.getInstance().get(this.getClass().getName(), "STATION_INFO");
 		bc_station_info = (ArrayList<String>) DataPool.getInstance().broadcast(this.STATION_INFO.collect());
 	}
 

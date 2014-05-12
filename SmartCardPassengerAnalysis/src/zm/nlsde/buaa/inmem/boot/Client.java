@@ -2,6 +2,7 @@ package zm.nlsde.buaa.inmem.boot;
 
 import zm.nlsde.buaa.inmem.ml.ODExtraction;
 import zm.nlsde.buaa.inmem.ml.PassCount;
+import zm.nlsde.buaa.inmem.ml.RegionDivide;
 import zm.nlsde.buaa.inmem.model.DataPool;
 
 public class Client {
@@ -26,6 +27,12 @@ public class Client {
 		pcThread.start();
 		pcThread.join();
 		System.out.println("Passenger Count took " + (System.currentTimeMillis() - time) / 1000 + " s.");
+		
+		Thread rcThread = new Thread(new RegionDivide());
+		time = System.currentTimeMillis();
+		rcThread.start();
+		rcThread.join();
+		System.out.println("Region Divide took " + (System.currentTimeMillis() - time) / 1000 + " s.");
 		
 		System.out.println("All Threads Finished.");
 	}

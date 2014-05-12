@@ -6,6 +6,7 @@ import java.util.List;
 
 import zm.nlsde.buaa.inmem.ml.ODExtraction;
 import zm.nlsde.buaa.inmem.ml.PassCount;
+import zm.nlsde.buaa.inmem.ml.RegionDivide;
 
 public class AppConf {
 	public static final Boolean isDebug = true;
@@ -23,7 +24,7 @@ public class AppConf {
 	// initiate DATA_TABLE
 	static {
 		if (AppConf.isDebug) {
-			DATA_TABLE.put("SMARTCARD", "/usr/zm/sample.csv");
+			DATA_TABLE.put("SMARTCARD", "/usr/zming/data/card/sample.csv");
 			DATA_TABLE.put("STATION_INFO", "baseData/stationinfo.csv");
 		} else {
 			DATA_TABLE.put("SMARTCARD", AppConf.HDFS_ROOT + "card/BUScard/");
@@ -39,6 +40,9 @@ public class AppConf {
 		
 		PERMISSION_TABLE.put(PassCount.class.getName(), new ArrayList<String>());
 		PERMISSION_TABLE.get(PassCount.class.getName()).add("SMARTCARD_FULLOD");
+		
+		PERMISSION_TABLE.put(RegionDivide.class.getName(), new ArrayList<String>());
+		PERMISSION_TABLE.get(RegionDivide.class.getName()).add("POINT_COUNT");
 	}
 	
 }

@@ -13,8 +13,9 @@ public class PassCount implements Runnable {
 
 	private JavaRDD<String> SMARTCARD_FULLOD;
 
+	@SuppressWarnings("unchecked")
 	public PassCount() {
-		this.SMARTCARD_FULLOD = DataPool.getInstance().get(this.getClass().getName(), "SMARTCARD_FULLOD");
+		this.SMARTCARD_FULLOD = (JavaRDD<String>) DataPool.getInstance().get(this.getClass().getName(), "SMARTCARD_FULLOD");
 	}
 
 	@Override
@@ -31,8 +32,7 @@ public class PassCount implements Runnable {
 		Map<String, Object> downcount = pointCountDown.countByKey();
 		System.out.println("Passenger Count Finished with " + downcount.size() + " Alighting Keys.");
 		
-		// TODO
-//		DataPool.getInstance().put("POINT_COUNT", pointCountUp.union(pointCountDown));
+		DataPool.getInstance().put("POINT_COUNT", pointCountUp.union(pointCountDown));
 	}
 	
 	@SuppressWarnings("serial")
