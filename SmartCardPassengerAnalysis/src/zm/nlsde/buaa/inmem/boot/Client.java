@@ -1,8 +1,8 @@
 package zm.nlsde.buaa.inmem.boot;
 
 import zm.nlsde.buaa.inmem.ml.ODExtraction;
-import zm.nlsde.buaa.inmem.ml.PassCount;
-import zm.nlsde.buaa.inmem.ml.RegionDivide;
+import zm.nlsde.buaa.inmem.ml.FastPassengerCount;
+import zm.nlsde.buaa.inmem.ml.FastRegionDivide;
 import zm.nlsde.buaa.inmem.model.DataPool;
 
 public class Client {
@@ -22,13 +22,13 @@ public class Client {
 		odeThread.join();
 		System.out.println("OD Extration took " + (System.currentTimeMillis() - time) / 1000 + " s.");
 		
-		Thread pcThread = new Thread(new PassCount());
+		Thread pcThread = new Thread(new FastPassengerCount());
 		time = System.currentTimeMillis();
 		pcThread.start();
 		pcThread.join();
 		System.out.println("Passenger Count took " + (System.currentTimeMillis() - time) / 1000 + " s.");
 		
-		Thread rcThread = new Thread(new RegionDivide());
+		Thread rcThread = new Thread(new FastRegionDivide());
 		time = System.currentTimeMillis();
 		rcThread.start();
 		rcThread.join();

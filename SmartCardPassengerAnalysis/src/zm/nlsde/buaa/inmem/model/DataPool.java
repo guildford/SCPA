@@ -21,7 +21,7 @@ public class DataPool {
 		// initial jsc
 		SparkConf spconf = new SparkConf();
 		if (AppConf.isDebug) {
-			spconf.setMaster("local[2]");
+			spconf.setMaster("local[8]");
 		} else {
 			spconf.setMaster("yarn-standalone");
 		}
@@ -36,7 +36,7 @@ public class DataPool {
 	}
 	
 	private HashMap<String, JavaRDD<String>> data = new HashMap<String, JavaRDD<String>>();
-	private HashMap<String, JavaPairRDD<String, String>> pairdata = new HashMap<String, JavaPairRDD<String, String>>();
+	private HashMap<String, JavaPairRDD<String, Object>> pairdata = new HashMap<String, JavaPairRDD<String, Object>>();
 	
 	private static class DataPoolHolder {
 		private static final DataPool INSTANCE = new DataPool();
@@ -79,7 +79,7 @@ public class DataPool {
 		}
 	}
 	
-	public Boolean put(String name, JavaPairRDD<String, String> pair) {
+	public Boolean put(String name, JavaPairRDD<String, Object> pair) {
 		// memory capacity
 		if (!this.isMemoryAdequate()) {
 			System.err.println("No adequate memory to cache.");
@@ -100,7 +100,7 @@ public class DataPool {
 		return this.data;
 	}
 	
-	public HashMap<String, JavaPairRDD<String, String>> getAllPairRDD() {
+	public HashMap<String, JavaPairRDD<String, Object>> getAllPairRDD() {
 		return this.pairdata;
 	}
 

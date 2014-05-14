@@ -29,7 +29,12 @@ public class RegionDivide {
 //	public static final int COUNT_TH = 4000;
 //	public static final int DISTENCE_TH = 1500;
 //	public static final int SIMILAR_TH = 50;
-	public static final int COUNT_TH = 300;
+//	public static final int COUNT_TH = 300;
+//	public static final int DISTENCE_TH = 500;
+//	public static final int SIMILAR_TH = 50;
+	
+	// TODO for spark local test
+	public static final int COUNT_TH = 2;
 	public static final int DISTENCE_TH = 500;
 	public static final int SIMILAR_TH = 50;
 
@@ -37,10 +42,14 @@ public class RegionDivide {
 	private final static String SERVICE_PATH = "webapp/data";
 
 	private String date;
-	private HashMap<String, List<RegionCountBean>> result = null;
+	public HashMap<String, List<RegionCountBean>> result = null;
 
 	public RegionDivide(String date) {
 		this.date = date;
+	}
+	
+	public RegionDivide () {
+		
 	}
 
 	public void generalTheRegion() {
@@ -90,8 +99,21 @@ public class RegionDivide {
 			}
 		}
 	}
+	
+	public void generalTheChart(PointCountBean pcb) {
+		for (String key : result.keySet()) {
+			List<RegionCountBean> tl = result.get(key);
+			for (RegionCountBean rcb : tl) {
+				System.out.println(rcb.points + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+				if (RegionUtil.pointInRegion(pcb, rcb)) {
+					rcb.addChartCount(pcb.getTime(), pcb.getUd(),
+							pcb.getCount());
+				}
+			}
+		}
+	}
 
-	private void generalTheRegion(String time, List<PointCountBean> list) {
+	public void generalTheRegion(String time, List<PointCountBean> list) {
 		List<RegionCountBean> re = new ArrayList<RegionCountBean>();
 		boolean flag=true;
 		while (flag){
@@ -102,12 +124,12 @@ public class RegionDivide {
 					continue;
 				if (rcb==null){
 					rcb=new RegionCountBean();
-					this.merge(rcb, pcb);
+					merge(rcb, pcb);
 					pcb.dealed=true;
 					flag=true;
 				}
-				else if (this.canMerge(rcb,pcb)){
-					this.merge(rcb, pcb);
+				else if (canMerge(rcb,pcb)){
+					merge(rcb, pcb);
 					pcb.dealed=true;
 					flag=true;
 				}

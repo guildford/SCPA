@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import zm.nlsde.buaa.inmem.ml.ODExtraction;
-import zm.nlsde.buaa.inmem.ml.PassCount;
-import zm.nlsde.buaa.inmem.ml.RegionDivide;
+import zm.nlsde.buaa.inmem.ml.FastPassengerCount;
+import zm.nlsde.buaa.inmem.ml.FastRegionDivide;
 
 public class AppConf {
 	public static final Boolean isDebug = true;
@@ -16,6 +16,8 @@ public class AppConf {
 	public static final String BROADCAST_NAME = "Http";
 	
 	public static final String BROADCAST_BLOCKSIZE = "4096";
+	
+	public static final int TIME_PRECISION = 10;
 
 	public static final HashMap<String, String> DATA_TABLE = new HashMap<String, String>();
 	
@@ -38,11 +40,11 @@ public class AppConf {
 		PERMISSION_TABLE.get(ODExtraction.class.getName()).add("SMARTCARD");
 		PERMISSION_TABLE.get(ODExtraction.class.getName()).add("STATION_INFO");
 		
-		PERMISSION_TABLE.put(PassCount.class.getName(), new ArrayList<String>());
-		PERMISSION_TABLE.get(PassCount.class.getName()).add("SMARTCARD_FULLOD");
+		PERMISSION_TABLE.put(FastPassengerCount.class.getName(), new ArrayList<String>());
+		PERMISSION_TABLE.get(FastPassengerCount.class.getName()).add("SMARTCARD_FULLOD");
 		
-		PERMISSION_TABLE.put(RegionDivide.class.getName(), new ArrayList<String>());
-		PERMISSION_TABLE.get(RegionDivide.class.getName()).add("POINT_COUNT");
+		PERMISSION_TABLE.put(FastRegionDivide.class.getName(), new ArrayList<String>());
+		PERMISSION_TABLE.get(FastRegionDivide.class.getName()).add("POINT_COUNT");
 	}
 	
 }
