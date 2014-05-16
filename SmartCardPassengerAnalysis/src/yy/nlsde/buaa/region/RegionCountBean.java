@@ -27,7 +27,7 @@ public class RegionCountBean extends RegionBean{
 		if (!chartlist.containsKey(time)){
 			chartlist.put(time, new RegionChartBean(time+":00"));
 		}
-		chartlist.get(time).add(ud,count);
+		chartlist.get(time).add(ud,	count);
 	}
 	
 	public String toString(){

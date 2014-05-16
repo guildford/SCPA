@@ -49,7 +49,7 @@ public class RegionDivide {
 	}
 	
 	public RegionDivide () {
-		
+		this.date = "just4test";
 	}
 
 	public void generalTheRegion() {
@@ -104,7 +104,6 @@ public class RegionDivide {
 		for (String key : result.keySet()) {
 			List<RegionCountBean> tl = result.get(key);
 			for (RegionCountBean rcb : tl) {
-				System.out.println(rcb.points + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 				if (RegionUtil.pointInRegion(pcb, rcb)) {
 					rcb.addChartCount(pcb.getTime(), pcb.getUd(),
 							pcb.getCount());
@@ -135,8 +134,10 @@ public class RegionDivide {
 				}
 			}
 			if (flag){
-				if (rcb.getCount()>COUNT_TH)
+				if (rcb.getCount()>COUNT_TH){
 					re.add(rcb);
+//					rcb.toString();
+				}
 			}
 		}
 //		for (PointCountBean pcb : list) {

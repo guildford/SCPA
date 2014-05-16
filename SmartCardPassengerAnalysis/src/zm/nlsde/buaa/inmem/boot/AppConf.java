@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import zm.nlsde.buaa.inmem.ml.ODExtraction;
 import zm.nlsde.buaa.inmem.ml.FastPassengerCount;
+import zm.nlsde.buaa.inmem.ml.FastRegionChart;
 import zm.nlsde.buaa.inmem.ml.FastRegionDivide;
+import zm.nlsde.buaa.inmem.ml.ODExtraction;
 
 public class AppConf {
 	public static final Boolean isDebug = true;
@@ -45,6 +46,9 @@ public class AppConf {
 		
 		PERMISSION_TABLE.put(FastRegionDivide.class.getName(), new ArrayList<String>());
 		PERMISSION_TABLE.get(FastRegionDivide.class.getName()).add("POINT_COUNT");
+		
+		PERMISSION_TABLE.put(FastRegionChart.class.getName(), new ArrayList<String>());
+		PERMISSION_TABLE.get(FastRegionChart.class.getName()).add("POINT_COUNT");
 	}
 	
 }

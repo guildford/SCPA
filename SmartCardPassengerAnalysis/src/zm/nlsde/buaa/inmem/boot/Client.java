@@ -1,8 +1,10 @@
 package zm.nlsde.buaa.inmem.boot;
 
-import zm.nlsde.buaa.inmem.ml.ODExtraction;
+import yy.nlsde.buaa.region.RegionDivide;
 import zm.nlsde.buaa.inmem.ml.FastPassengerCount;
+import zm.nlsde.buaa.inmem.ml.FastRegionChart;
 import zm.nlsde.buaa.inmem.ml.FastRegionDivide;
+import zm.nlsde.buaa.inmem.ml.ODExtraction;
 import zm.nlsde.buaa.inmem.model.DataPool;
 
 public class Client {
@@ -16,23 +18,36 @@ public class Client {
 		
 		// start threads
 		// TODO timer
-		Thread odeThread = new Thread(new ODExtraction());
+		Thread ode = new Thread(new ODExtraction());
 		time = System.currentTimeMillis();
-		odeThread.start();
-		odeThread.join();
+		ode.start();
+		ode.join();
 		System.out.println("OD Extration took " + (System.currentTimeMillis() - time) / 1000 + " s.");
 		
-		Thread pcThread = new Thread(new FastPassengerCount());
+		Thread fpc = new Thread(new FastPassengerCount());
 		time = System.currentTimeMillis();
-		pcThread.start();
-		pcThread.join();
+		fpc.start();
+		fpc.join();
 		System.out.println("Passenger Count took " + (System.currentTimeMillis() - time) / 1000 + " s.");
 		
-		Thread rcThread = new Thread(new FastRegionDivide());
+		RegionDivide rd = new RegionDivide();
+		
+		Thread frd = new Thread(new FastRegionDivide(rd));
 		time = System.currentTimeMillis();
-		rcThread.start();
-		rcThread.join();
+		frd.start();
+		frd.join();
 		System.out.println("Region Divide took " + (System.currentTimeMillis() - time) / 1000 + " s.");
+		
+		rd.outTmpFile();
+		rd.outAreaFile();
+		
+		Thread frc = new Thread(new FastRegionChart(rd));
+		time = System.currentTimeMillis();
+		frc.start();
+		frc.join();
+		System.out.println("Region Chart took " + (System.currentTimeMillis() - time) / 1000 + " s.");
+		
+		rd.outChartFile();
 		
 		System.out.println("All Threads Finished.");
 	}
