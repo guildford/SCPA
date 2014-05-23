@@ -10,7 +10,7 @@
 	.getRealPath("/");
 	try{
 		System.out.println(System.currentTimeMillis() + "##read data: "
-				+ path + "data/heat/1/" + d + "/" + t + ".json");
+				+ path + "data/heat/1/" + d + "/" + ".json");
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				new FileInputStream(path + "data/heat/1/" + d + "/" + t
 						+ ".json"), "gbk"));

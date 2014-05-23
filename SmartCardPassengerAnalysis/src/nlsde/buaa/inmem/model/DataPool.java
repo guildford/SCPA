@@ -33,6 +33,10 @@ public class DataPool {
 		// TODO broadcast related
 		System.setProperty("spark.broadcast.factory", "org.apache.spark.broadcast." + AppConf.BROADCAST_NAME + "BroadcastFactory");
 	    System.setProperty("spark.broadcast.blockSize", AppConf.BROADCAST_BLOCKSIZE);
+	    
+//	    if (AppConf.isDebug) {
+//	    	System.setProperty("spark.executor.memory", "6g");
+//	    }
 	}
 	
 	private HashMap<String, JavaRDD<String>> data = new HashMap<String, JavaRDD<String>>();

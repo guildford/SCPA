@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import nlsde.buaa.inmem.ml.AllInOne;
 import nlsde.buaa.inmem.ml.FastPassengerCount;
 import nlsde.buaa.inmem.ml.FastRegionChart;
 import nlsde.buaa.inmem.ml.FastRegionDivide;
 import nlsde.buaa.inmem.ml.ODExtraction;
 
 public class AppConf {
-	public static final Boolean isDebug = false;
+	public static final Boolean isDebug = true;
 
 	public static final String HDFS_ROOT = "hdfs://mycluster/user/zming/";
 	
@@ -49,6 +50,10 @@ public class AppConf {
 		
 		PERMISSION_TABLE.put(FastRegionChart.class.getName(), new ArrayList<String>());
 		PERMISSION_TABLE.get(FastRegionChart.class.getName()).add("POINT_COUNT");
+		
+		PERMISSION_TABLE.put(AllInOne.class.getName(), new ArrayList<String>());
+		PERMISSION_TABLE.get(AllInOne.class.getName()).add("SMARTCARD");
+		PERMISSION_TABLE.get(AllInOne.class.getName()).add("STATION_INFO");
 	}
 	
 }

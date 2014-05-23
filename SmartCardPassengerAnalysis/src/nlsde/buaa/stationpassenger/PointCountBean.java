@@ -28,6 +28,16 @@ public class PointCountBean {
 		this.count=0;
 	}
 	
+	// TODO
+	public PointCountBean(String rddline) {
+		String[] token = rddline.split(",");
+		this.lon = Double.valueOf(token[0]);
+		this.lat = Double.valueOf(token[1]);
+		this.time = token[2];
+		this.ud = Integer.valueOf(token[3]);
+		this.count = Integer.valueOf(token[4]);
+	}
+	
 	@Override
 	public String toString(){
 		return this.lon+","+this.lat+","+this.time+","+this.ud+","+this.count;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import nlsde.buaa.inmem.boot.AppConf;
 import nlsde.buaa.inmem.model.DataPool;
+import nlsde.buaa.stationpassenger.PassengerCount;
 import nlsde.buaa.stationpassenger.PointCountBean;
 
 import org.apache.spark.api.java.JavaPairRDD;
@@ -16,10 +17,18 @@ import scala.Tuple2;
 public class FastPassengerCount implements Runnable {
 
 	private JavaRDD<String> SMARTCARD_FULLOD;
+	
+	private static PassengerCount pc;
 
 	@SuppressWarnings("unchecked")
 	public FastPassengerCount() {
 		this.SMARTCARD_FULLOD = (JavaRDD<String>) DataPool.getInstance().get(this.getClass().getName(), "SMARTCARD_FULLOD");
+	}
+	
+	@SuppressWarnings("unchecked")
+	public FastPassengerCount(PassengerCount pc) {
+		this.SMARTCARD_FULLOD = (JavaRDD<String>) DataPool.getInstance().get(this.getClass().getName(), "SMARTCARD_FULLOD");
+		FastPassengerCount.pc = pc;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -28,7 +37,7 @@ public class FastPassengerCount implements Runnable {
 		
 		@SuppressWarnings("rawtypes")
 		JavaPairRDD POINT_COUNT = this.SMARTCARD_FULLOD.keyBy(new KeyByLocationTimeUP())
-//				                           .union(this.SMARTCARD_FULLOD.keyBy(new KeyByLocationTimeDown()))
+				                           .union(this.SMARTCARD_FULLOD.keyBy(new KeyByLocationTimeDown()))
 				                           .groupByKey();
 		
 //		System.out.println(POINT_COUNT.count() + " $$$");
@@ -36,6 +45,18 @@ public class FastPassengerCount implements Runnable {
 //		POINT_COUNT.foreach(new PrintAll());
 		
 		DataPool.getInstance().put("POINT_COUNT", POINT_COUNT);
+		
+		POINT_COUNT.foreach(new Normal2Result());
+		
+	}
+	
+	@SuppressWarnings("serial")
+	static class Normal2Result extends VoidFunction<Tuple2<String, List<String>>> {
+
+		@Override
+		public void call(Tuple2<String, List<String>> tp) throws Exception {
+			FastPassengerCount.pc.result.put(tp._1(), new PointCountBean(tp._1() + "," + tp._2().size()));
+		}
 		
 	}
 	

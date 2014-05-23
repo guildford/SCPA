@@ -15,7 +15,7 @@ public class FastRegionChart implements Runnable{
 	
 	private JavaPairRDD<String, List<String>> POINT_COUNT;
 	
-	private static RegionDivide rd;
+	public static RegionDivide rd;
 	
 	@SuppressWarnings("unchecked")
 	public FastRegionChart(RegionDivide rd) {

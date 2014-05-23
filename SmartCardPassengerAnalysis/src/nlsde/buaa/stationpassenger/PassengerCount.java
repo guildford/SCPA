@@ -24,12 +24,17 @@ public class PassengerCount {
 	private final static String OUT_PATH="stationPassenger";
 	private final static String SERVICE_PATH="webapp/data";
 
-	private HashMap<String, PointCountBean> result;
+	public HashMap<String, PointCountBean> result;
 	private String date;
 	
 	public PassengerCount(String date) {
 		result = new HashMap<String, PointCountBean>();
 		this.date=date;
+	}
+	
+	public PassengerCount() {
+		result = new HashMap<String, PointCountBean>();
+		this.date = "20120830";
 	}
 
 	public void count() {
@@ -91,6 +96,11 @@ public class PassengerCount {
 		}
 		for(String key:tmap.keySet()){
 			String[] subkey=key.split("_");
+			if (Integer.valueOf(subkey[0].substring(8)) < 10) {
+				subkey[0] = subkey[0].substring(9);
+			} else {
+				subkey[0] = subkey[0].substring(8);
+			}
 			outToHeatFile(tmap.get(key),SERVICE_PATH+File.separator+"heat"+File.separator+subkey[1]+File.separator+formatDate(date)+File.separator+subkey[0]+".json");
 		}
 	}

@@ -6,6 +6,7 @@ import nlsde.buaa.inmem.ml.FastRegionDivide;
 import nlsde.buaa.inmem.ml.ODExtraction;
 import nlsde.buaa.inmem.model.DataPool;
 import nlsde.buaa.region.RegionDivide;
+import nlsde.buaa.stationpassenger.PassengerCount;
 
 public class Client {
 	
@@ -24,11 +25,17 @@ public class Client {
 		ode.join();
 		System.out.println("OD Extration took " + (System.currentTimeMillis() - time) / 1000 + " s.");
 		
-		Thread fpc = new Thread(new FastPassengerCount());
+		PassengerCount pc = new PassengerCount();
+		
+		Thread fpc = new Thread(new FastPassengerCount(pc));
 		time = System.currentTimeMillis();
 		fpc.start();
 		fpc.join();
 		System.out.println("Passenger Count took " + (System.currentTimeMillis() - time) / 1000 + " s.");
+		
+		System.out.println(pc.result.size());
+		pc.outTmpFile();
+		pc.outHeatFile();
 		
 		RegionDivide rd = new RegionDivide();
 		
@@ -37,17 +44,17 @@ public class Client {
 		frd.start();
 		frd.join();
 		System.out.println("Region Divide took " + (System.currentTimeMillis() - time) / 1000 + " s.");
-//		
-//		rd.outTmpFile();
-//		rd.outAreaFile();
-//		
-//		Thread frc = new Thread(new FastRegionChart(rd));
-//		time = System.currentTimeMillis();
-//		frc.start();
-//		frc.join();
-//		System.out.println("Region Chart took " + (System.currentTimeMillis() - time) / 1000 + " s.");
-//		
-//		rd.outChartFile();
+		
+		rd.outTmpFile();
+		rd.outAreaFile();
+		
+		Thread frc = new Thread(new FastRegionChart(rd));
+		time = System.currentTimeMillis();
+		frc.start();
+		frc.join();
+		System.out.println("Region Chart took " + (System.currentTimeMillis() - time) / 1000 + " s.");
+		
+		rd.outChartFile();
 		
 		System.out.println("All Threads Finished.");
 	}

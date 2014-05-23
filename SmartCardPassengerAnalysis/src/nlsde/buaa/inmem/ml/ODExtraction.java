@@ -13,7 +13,7 @@ public class ODExtraction implements Runnable {
 
 	private JavaRDD<String> SMARTCARD;
 	private JavaRDD<String> STATION_INFO;
-	private static ArrayList<String> bc_station_info;
+	public static ArrayList<String> bc_station_info;
 
 	@SuppressWarnings("unchecked")
 	public ODExtraction() {
@@ -62,8 +62,8 @@ public class ODExtraction implements Runnable {
 				System.out.println("###");
 			}
 			
-			board = bc_station_info.get(rand.nextInt(150));
-			alight = bc_station_info.get(rand.nextInt(150));
+			board = bc_station_info.get(rand.nextInt(10000));
+			alight = bc_station_info.get(rand.nextInt(10000));
 //			board = bc_station_info.get(rand.nextInt(bc_station_info.size()));
 //			alight = bc_station_info.get(rand.nextInt(bc_station_info.size()));
 			

@@ -17,7 +17,7 @@ public class FastRegionDivide implements Runnable{
 	
 	private JavaPairRDD<String, List<String>> POINT_COUNT;
 	
-	private static RegionDivide rd;
+	public static RegionDivide rd;
 	
 	@SuppressWarnings("unchecked")
 	public FastRegionDivide(RegionDivide rd) {

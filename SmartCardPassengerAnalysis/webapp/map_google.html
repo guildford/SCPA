@@ -57,8 +57,8 @@ input[type=range]:after {
 <script type="text/javascript">
 	function page_initial() {
 		var param = window.location.href;
-		var init_t = "8";
-		var init_d = "2012-09-01";
+		var init_t = "10";
+		var init_d = "2012-08-30";
 		if (param.indexOf("?") > 0) {
 			init_t = param.substring(param.indexOf("t=") + 2, param
 					.indexOf("&"));
@@ -129,7 +129,7 @@ input[type=range]:after {
 		var MAXP = 100000;
 		var arr = new window.mapleque.arrow();
 
-		stream_datas.forEach(function(d, l) {
+		/*stream_datas.forEach(function(d, l) {
 			var st = Math.log(d[4]) / Math.log(MAXP);
 			if (st < 0)
 				st = 0;
@@ -141,7 +141,7 @@ input[type=range]:after {
 				y : d[3]
 			}, st);
 			arr.paint(map);
-		});
+		});*/
 
 		var are = new window.mapleque.area();
 		area_datas.forEach(function(d, l) {
@@ -240,11 +240,11 @@ input[type=range]:after {
 		var d = document.getElementById("date").value;//d: 2012-05-30
 		$.get("./jsp/area_data.jsp?d=" + d + "&t=" + t + "", function(ares) {
 			area_datas = JSON.parse(ares);
-			$.get("./jsp/stream_data.jsp?d=" + d + "&t=" + t + "", function(sres) {
-			//$.get("./jsp/stream_data.jsp?d=2013-05-31&t=7", function(sres) {
-				stream_datas = JSON.parse(sres);
+//			$.get("./jsp/stream_data.jsp?d=" + d + "&t=" + t + "", function(sres) {
+//			//$.get("./jsp/stream_data.jsp?d=2013-05-31&t=7", function(sres) {
+//				stream_datas = JSON.parse(sres);
 				load();
-			});
+//			});
 		});
 	}
 
